@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculator</title>
+
+<style>
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.calculator {
+  background: black;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  width: 260px;
+}
+
+#display {
+  width: 100%;
+  height: 60px;
+  font-size: 24px;
+  text-align: right;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 8px;
+  background: #504f4f;
+  box-sizing: border-box;
+  color: antiquewhite;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+button {
+  height: 50px;
+  font-size: 18px;
+  border: none;
+  border-radius: 20px;
+  background: #e98708;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #d1d5db;
+  transform: scale(1.05);
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+.clear {
+  background: #ff6b6b;
+  color: black;
+}
+
+.equals {
+  background: #4caf50;
+  color: black;
+}
+</style>
+</head>
+
+<body>
+
+<div class="calculator">
+
+  <input type="text" id="display" readonly>
+
+  <div class="buttons">
+    <button class="clear" onclick="clearDisplay()">C</button>
+    <button onclick="appendToDisplay('/')">÷</button>
+    <button onclick="appendToDisplay('*')">×</button>
+    <button onclick="appendToDisplay('-')">-</button>
+
+    <button onclick="appendToDisplay('7')">7</button>
+    <button onclick="appendToDisplay('8')">8</button>
+    <button onclick="appendToDisplay('9')">9</button>
+    <button onclick="appendToDisplay('+')">+</button>
+
+    <button onclick="appendToDisplay('4')">4</button>
+    <button onclick="appendToDisplay('5')">5</button>
+    <button onclick="appendToDisplay('6')">6</button>
+    <button class="equals" onclick="calculate()">=</button>
+
+    <button onclick="appendToDisplay('1')">1</button>
+    <button onclick="appendToDisplay('2')">2</button>
+    <button onclick="appendToDisplay('3')">3</button>
+
+    <button onclick="appendToDisplay('0')">0</button>
+    <button onclick="appendToDisplay('.')">.</button>
+  </div>
+
+</div>
+
+<script>
+const display = document.querySelector('#display');
+
+function isOperator(char) {
+  return ["+", "-", "*", "/"].includes(char);
+}
+
+function appendToDisplay(value) {
+  const current = display.value;
+
+  if (current === "" && isOperator(value) && value !== "-") return;
+
+  const lastChar = current.slice(-1);
+  if (isOperator(lastChar) && isOperator(value)) {
+    display.value = current.slice(0, -1) + value;
+    return;
+  }
+
+  display.value += value;
+}
+
+function clearDisplay() {
+  display.value = "";
+}
+
+function calculate() {
+  const expression = display.value;
+
+  if (!expression) return;
+
+  if (isOperator(expression.slice(-1))) {
+    display.value = "Error";
+    return;
+  }
+
+  try {
+    const result = eval(expression);
+
+    if (!isFinite(result)) {
+      display.value = "Error";
+      return;
+    }
+
+    display.value = result;
+  } catch {
+    display.value = "Error";
+  }
+}
+
+document.addEventListener("keydown", function (event) {
+  const key = event.key;
+
+  if (!isNaN(key)) appendToDisplay(key);
+  else if (["+","-","*","/"].includes(key)) appendToDisplay(key);
+  else if (key === ".") appendToDisplay(".");
+  else if (key === "Enter" || key === "=") {
+    event.preventDefault();
+    calculate();
+  }
+  else if (key === "Escape") clearDisplay();
+  else if (key === "Backspace") {
+    display.value = display.value.slice(0, -1);
+  }
+});
+</script>
+
+</body>
+</html>

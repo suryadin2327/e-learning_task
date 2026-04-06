@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task App</title>
+
+  <style>
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #101011;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      width: 350px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    #taskInput {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      outline: none;
+    }
+
+    #taskInput:focus {
+      border-color: #4a90e2;
+    }
+
+    #addBtn {
+      width: 100%;
+      padding: 10px;
+      background: #4a90e2;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #addBtn:hover {
+      background: #357abd;
+    }
+
+    #taskList {
+      margin-top: 15px;
+      text-align: left;
+    }
+
+    #taskList li {
+      list-style: none;
+      background: #f1f3f5;
+      padding: 10px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    #taskList span {
+      flex: 1;
+      margin-left: 8px;
+    }
+
+    .completed {
+      text-decoration: line-through;
+      color: #888;
+      background-color: #e9ecef;
+      opacity: 0.8;
+    }
+
+    .deleteBtn {
+      background: crimson;
+      color: white;
+      border: none;
+      padding: 5px 8px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .deleteBtn:hover {
+      background: darkred;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h2>Task List</h2>
+
+    <input type="text" id="taskInput" placeholder="Enter a task">
+    <button id="addBtn">Add Task</button>
+
+    <ul id="taskList"></ul>
+  </div>
+
+  <script>
+
+    const taskInput = document.getElementById('taskInput');
+    const addBtn = document.getElementById('addBtn');
+    const taskList = document.getElementById('taskList');
+
+    function addTask() {
+
+      const taskText = taskInput.value.trim();
+
+      if (taskText === '') {
+        alert('Please enter a task!');
+        return;
+      }
+
+      const li = document.createElement('li');
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+
+      const span = document.createElement('span');
+      span.textContent = taskText;
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = 'Delete';
+      deleteBtn.classList.add('deleteBtn');
+
+      checkbox.addEventListener('change', () => {
+        li.classList.toggle('completed');
+      });
+
+      deleteBtn.addEventListener('click', () => {
+        li.remove();
+      });
+
+      li.appendChild(checkbox);
+      li.appendChild(span);
+      li.appendChild(deleteBtn);
+
+      taskList.appendChild(li);
+
+      taskInput.value = '';
+      taskInput.focus();
+    }
+
+    addBtn.addEventListener('click', addTask);
+
+    taskInput.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') {
+        addTask();
+      }
+    });
+
+  </script>
+
+</body>
+</html>
